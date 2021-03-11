@@ -1,0 +1,7 @@
+double X(double t) {
+    return 0.3 * t;
+}
+
+double Y(double t) {
+    return 0.7 * t;
+}
