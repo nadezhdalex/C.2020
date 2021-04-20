@@ -10,7 +10,7 @@ Point::Point(Real x, Real y) {
     this -> y = y;
 }
 
-static int Point::compare(const void *arg1, const void *arg2) {
+int Point::compare(const void *arg1, const void *arg2) {
     Point *A = (Point*)arg1;
     Point *B = (Point*)arg2;
     return compareReal(A -> x, B -> x, EPS);

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Interpolation::Interpolation(Point *points_, int n, Real eps) {
+Interpolation::Interpolation(Point *points_, int n, double eps) {
 	this -> points = (Point*)malloc(n * sizeof(Point));
 	this -> eps = eps;
 	this -> n = n;

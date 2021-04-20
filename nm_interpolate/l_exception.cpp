@@ -2,7 +2,7 @@
 #include <string>
 #include <cmath>
 #include <cstdlib>
-#include "L_exception.h"
+#include "l_exception.h"
 
 L_exception::L_exception(int code_, string message_) {
 	this -> cod = code_;

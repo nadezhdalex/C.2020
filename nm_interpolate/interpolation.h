@@ -12,7 +12,7 @@ class Interpolation {
 		Real begin, end, eps;
 		int n;
     public:
-		Interpolation(Point *points_, int n, Real eps);
+		Interpolation(Point *points_, int n, double eps);
 		~Interpolation();
     	Real inter_lagrange(Real x);
 };

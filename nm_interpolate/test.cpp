@@ -6,8 +6,9 @@
 #include "interpolation.h"
 #include "l_exception.h"
 #include "point.h"
+#include "my_math.h"
 
-static void test(vector<Point> &vec, int n, Real x, Real expected_result, int expected_error, char *message) {
+static void test(Point *vec, int n, Real x, Real expected_result, int expected_error, char *message) {
     int error = NA_OK;
     Interpolation *points;
     try {
@@ -18,7 +19,7 @@ static void test(vector<Point> &vec, int n, Real x, Real expected_result, int ex
     Real result;
     if(error = NA_OK) {
     	try {
-    	result = points -> inter_lagrange(Real x);
+    	result = points -> inter_lagrange(x);
     	}	catch (L_exception &err) {
     	error = err.code();
     	}
@@ -43,11 +44,11 @@ static void test(vector<Point> &vec, int n, Real x, Real expected_result, int ex
     }
 }
 
-int main( {
-	vector<Point> points1(3);
-	points[0] ={0, -1};
-	points[1] ={1, 1};
-	points[2] ={4, 1};
+int main() {
+	Point points1[3];
+	Point points1[0] ={0, -1};
+	Point points1[1] ={1, 1};
+	Point points1[2] ={4, 1};
     test(points1, 3, 2, 2, NA_OK, "Test 1");
     return 0; 
 }
