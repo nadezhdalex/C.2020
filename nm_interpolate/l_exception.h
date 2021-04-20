@@ -1,6 +1,10 @@
 #ifndef L_EXCEPTION
 #define L_EXCEPTION
 #include <string>
+#define NA_OK 1 // ошибок нет
+#define NA_TOO_LITTLE -1 // количество точек меньше 2
+#define NA_ABSCISSA -2 // одинаковые точки
+#define NA_SEGMENT -3 // значение выходит за пределы отрезка
 
 using namespace std;
 

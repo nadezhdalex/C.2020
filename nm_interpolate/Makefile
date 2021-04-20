@@ -12,4 +12,4 @@ interpolation.o: interpolation.h my_math.h point.h l_exception.h interpolation.c
 test.o: interpolation.h my_math.h point.h l_exception.h test.cpp
 	g++ -c test.cpp
 prog: interpolation.o my_math.o point.o l_exception.o test.o
-	g++ -o prog interpolation.o umath.o point.o l_exception.o test.o -lm
+	g++ -o prog interpolation.o my_math.o point.o l_exception.o test.o -lm

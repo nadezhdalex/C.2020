@@ -8,11 +8,11 @@
 #include "point.h"
 #include "my_math.h"
 
-static void test(Point *vec, int n, Real x, Real expected_result, int expected_error, char *message) {
+static void test(Point *vec, int n, Real x, Real expected_result, int expected_error, const char *message) {
     int error = NA_OK;
     Interpolation *points;
     try {
-    	points = new Interpolation(vec, n, x, EPS);
+    	points = new Interpolation(vec, n, EPS);
     }	catch (L_exception &err) {
     	error = err.code();
     }
@@ -34,7 +34,7 @@ static void test(Point *vec, int n, Real x, Real expected_result, int expected_e
     	printf("Test OK! Right error!\n");
         return;
     }
-    if(compareReal(result, expected_result, EPS)) {
+    if(compareReal(result, expected_result, EPS) == 0) {
         printf("Test OK!\n");
         return;
     }
@@ -45,10 +45,9 @@ static void test(Point *vec, int n, Real x, Real expected_result, int expected_e
 }
 
 int main() {
-	Point points1[3];
-	Point points1[0] ={0, -1};
-	Point points1[1] ={1, 1};
-	Point points1[2] ={4, 1};
+	Point points1[] = {{0, -1}, {1, 1}, {4, 1}}; // функция -0.5x^2 + 2.5x - 1
     test(points1, 3, 2, 2, NA_OK, "Test 1");
+    Point points2[] = {{0, -1}, {0, -1}, {4, 1}}; 
+    test(points2, 3, 2, 2, NA_ABSCISSA , "Test 2");
     return 0; 
 }
