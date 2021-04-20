@@ -5,14 +5,14 @@
 #include "L_exception.h"
 
 L_exception::L_exception(int code_, string message_) {
-	this -> code = code_;
-	this -> message = message_;
+	this -> cod = code_;
+	this -> mes = message_;
 }
 
 string L_exception::message() const {
-	return this -> message;
+	return this -> mes;
 }
 
 int L_exception::code() const {
-	return this -> code;
+	return this -> cod;
 }

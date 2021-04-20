@@ -8,7 +8,7 @@ class Point {
         Real x, y;
     public:
         Point(Real x, Real y);
-        int compare(const void *arg1, const void *arg2);
+        static int compare(const void *arg1, const void *arg2);
         Real get_X();
         Real get_Y();
 };

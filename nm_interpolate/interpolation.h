@@ -1,5 +1,6 @@
 #ifndef INTERPOLATION
 #define INTERPOLATION
+#include "point.h"
 #define NA_OK 1 // ошибок нет
 #define NA_TOO_LITTLE -1 // количество точек меньше 2
 #define NA_ABSCISSA -2 // одинаковые точки

@@ -2,10 +2,12 @@
 #define L_EXCEPTION
 #include <string>
 
+using namespace std;
+
 class L_exception {
 	private:
-		int code;
-		string message;
+		int cod;
+		string mes;
 	public:
 		L_exception(int code_, string message_);
 		string message() const;

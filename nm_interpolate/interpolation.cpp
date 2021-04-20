@@ -5,6 +5,7 @@
 #include "interpolation.h"
 #include "l_exception.h"
 #include "point.h"
+#include "my_math.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ Interpolation::Interpolation(Point *points_, int n, Real eps) {
 	this -> n = n;
 
 	if(n < 2) {
-        throw L_exception(NA_TOO_LITTLE, "Too little points to compute")
+        throw L_exception(NA_TOO_LITTLE, "Too little points to compute");
     }
 		
 	begin = points_[0].get_X();
@@ -23,17 +24,17 @@ Interpolation::Interpolation(Point *points_, int n, Real eps) {
     for(int i = 0; i < n; i++) {
     	(this -> points)[i] = points_[i];
         
-        if(points_[i].getX() < begin) {
+        if(points_[i].get_X() < begin) {
         	begin = points_[i].get_X();
         }
-        if(points_[i].getX() > end) {
+        if(points_[i].get_X() > end) {
         	end = points_[i].get_X();
         }
 	}
 	qsort(this -> points, n, sizeof(Point), Point::compare);
 
         for(int j = 0; j < n - 1; j++) {
-        	if(compareDoubles((this -> points)[j].get_X(), (this -> points)[j + 1].get_X(), eps) == 0) {
+        	if(compareReal((this -> points)[j].get_X(), (this -> points)[j + 1].get_X(), eps) == 0) {
             	throw new L_exception(NA_ABSCISSA, "Two points have equal abscissa");
             }
        	}
