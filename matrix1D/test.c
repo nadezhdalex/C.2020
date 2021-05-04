@@ -3,7 +3,7 @@
 #include "matrix_1d.h"
 #include "errors.h"
 
-static Real find_inverse(const char *finameIN, const char *finameOUT, int *ncols, int *nrows; Real *matrix, NAError *err, Real eps) {
+static Real find_inverse(const char *finameIN, const char *finameOUT, int *ncols, int *nrows; Real *matrix, struct NAError *err, Real eps) {
 	matrix = readMatrix(&finameIN, &nrows, &ncols, &err);
 	Real *inverse;
 	inverse = (Real*)malloc(n * n * sizeof(Real));
@@ -24,7 +24,7 @@ static Real find_inverse(const char *finameIN, const char *finameOUT, int *ncols
 
 static void test(const char *finameIN, const char *finameOUT, int expected_error, char *message) {
 	int *ncols, *nrows;
-	NAError error; 
+	struct NAError error; 
     int error.code = NA_OK;
     Real *matrix; 
     Real result = find_inverse(finameIN, finameOUT, &ncols, &nrows, matrix, &error, EPS);
@@ -32,7 +32,7 @@ static void test(const char *finameIN, const char *finameOUT, int expected_error
     	printf("******* Test FAILED! WRONG ERROR_CODE******* %s\nRight ERROR = %d, Your error = %d\n Your message = %s\n", message, expected_error, error.code, error.mes);
         return;
     }
-    if(expected_error == error && error != NA_OK) {
+    if(expected_error == error && error.code != NA_OK) {
     	printf("Test OK! Right error!\n Your message = %s\n", error.mes);
         return;
     }

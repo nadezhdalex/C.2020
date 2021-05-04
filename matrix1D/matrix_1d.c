@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "my_math.h"
 
-Real readMatrix(const char *finame, int *nrows, int *ncols, NAError *err) {
+Real readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err) {
 	if(fileName == NULL) {
 		err.code = NA_FILENAME;
 		err.message = "Invalid file name";
@@ -55,7 +55,7 @@ Real readMatrix(const char *finame, int *nrows, int *ncols, NAError *err) {
 	return result;
 } 
 
-int printMatrix(const char *finame, Real *matrix, int nrows, int ncols, NAError *err) {
+int printMatrix(const char *finame, Real *matrix, int nrows, int ncols, struct NAError *err) {
 	if(fileName == NULL) {
 		err.code = NA_FILENAME;
 		err.message = "Invalid file name";
@@ -131,7 +131,7 @@ static Real multiplication(Real *A, Real *B, int n) {
     return C;
 }
 
-static void diagonal(Real *matrix, Real *matrix_dop, int n, NAError *err, Real eps) {
+static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err, Real eps) {
 	int error = NA_OK;
 	for(int k = 0; k < (n - 1); k++) {
 		error = NA_MATR_IS_SINGULAR;
@@ -165,7 +165,7 @@ static void diagonal(Real *matrix, Real *matrix_dop, int n, NAError *err, Real e
 	err.code = NA_OK
 }
 
-void inverse(Real *matrix, int n, NAError *err, Real eps) {
+void inverse(Real *matrix, int n, struct NAError *err, Real eps) {
 	Real *matrix_dop;
 	matrix_dop = (Real*)malloc(n * n * sizeof(Real));
 	for(int i = 0; i < n; i++)
