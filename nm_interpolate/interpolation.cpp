@@ -33,11 +33,11 @@ Interpolation::Interpolation(Point *points_, int n, double eps) {
 	}
 	qsort(this -> points, n, sizeof(Point), Point::compare);
 
-        for(int j = 0; j < n - 1; j++) {
-        	if(compareReal((this -> points)[j].get_X(), (this -> points)[j + 1].get_X(), eps) == 0) {
-            	throw new L_exception(NA_ABSCISSA, "Two points have equal abscissa");
-            }
-       	}
+    for(int j = 0; j < n - 1; j++) {
+        if(compareReal((this -> points)[j].get_X(), (this -> points)[j + 1].get_X(), eps) == 0) {
+            throw L_exception(NA_ABSCISSA, "Two points have equal abscissa");
+        }
+    }
 }
 
 Real Interpolation::inter_lagrange(Real x) {

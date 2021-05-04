@@ -17,7 +17,7 @@ static void test(Point *vec, int n, Real x, Real expected_result, int expected_e
     	error = err.code();
     }
     Real result;
-    if(error = NA_OK) {
+    if(error == NA_OK) {
     	try {
     	result = points -> inter_lagrange(x);
     	}	catch (L_exception &err) {
@@ -49,5 +49,8 @@ int main() {
     test(points1, 3, 2, 2, NA_OK, "Test 1");
     Point points2[] = {{0, -1}, {0, -1}, {4, 1}}; 
     test(points2, 3, 2, 2, NA_ABSCISSA , "Test 2");
+    test(points1, 3, 18, 2, NA_SEGMENT, "Test 3");
+    Point points3[] = {{0, -1}};
+    test(points3, 1, 2, 2, NA_TOO_LITTLE, "Test 3");
     return 0; 
 }
