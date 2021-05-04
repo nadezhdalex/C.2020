@@ -9,5 +9,5 @@
 
 struct NAError {
 	int code;
-	char mes;
+	char *mes;
 };
