@@ -13,7 +13,7 @@ typedef double Real;
 		Функция возвращает f(x) и записывает код ошибки.	
 */
 
-Real readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err);
+Real* readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err);
 int printMatrix(const char *finame, Real *matrix, int nrows, int ncols, struct NAError *err);
-void inverse(Real *matrix, int n, struct NAError *err);
-int check(Real *matrix, Real *inverse, int n, Real eps)
+void inverse(Real *matrix, int n, struct NAError *err, Real eps);
+int check(Real *matrix, Real *inverse, int n, Real eps);

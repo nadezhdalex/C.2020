@@ -1,46 +1,47 @@
 #include "matrix_1d.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "my_math.h"
 
-Real readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err) {
-	if(fileName == NULL) {
-		err.code = NA_FILENAME;
-		err.message = "Invalid file name";
-		return err.code;
+Real* readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err) {
+	if(finame == NULL) {
+		err->code = NA_FILENAME;
+		err->mes = "Invalid file name";
+		return NULL;
 	}
 	
 	FILE* fin = fopen(finame, "r");
 	if(fin == NULL) {
-		err.code = NA_CAN_NOT_OPEN_FILE;
-		err.message = "Can't open file";
-		return err.code;
+		err->code = NA_CAN_NOT_OPEN_FILE;
+		err->mes = "Can't open file";
+		return NULL;
 	}
 	if(nrows == NULL) {
-		err.code = NA_NULLPOINTER;
-		err.message = "NULL pointer to rows";
-		return err.code;
+		err->code = NA_NULLPOINTER;
+		err->mes = "NULL pointer to rows";
+		return NULL;
 	}
 	if(ncols == NULL) {
-		err.code = NA_NULLPOINTER;
-		err.message = "NULL pointer to cols";
-		return err.code;
+		err->code = NA_NULLPOINTER;
+		err->mes = "NULL pointer to cols";
+		return NULL;
 	}
 	
 	int rows, cols;
-	if(fscanf(fin, "%d%d%d", &rows, &cols) != 2 || rows < 1 || cols < 1) {
+	if(fscanf(fin, "%d%d", &rows, &cols) != 2 || rows < 1 || cols < 1) {
         fclose(fin);
-		err.code = NA_WRONG_NUMBER;
-		err.message = "Can't read cols or rows. Or they are out of range";
-		return err.code;
+		err->code = NA_WRONG_NUMBER;
+		err->mes = "Can't read cols or rows. Or they are out of range";
+		return NULL;
     }
     
 	Real *result;
 	result = (Real*)malloc(rows * cols * sizeof(Real));
 	if(result == NULL) {
 		fclose(fin);
-		err.code = NA_MEMORY;
-		err.message = "Result are out of memory";
-		return err.code;
+		err->code = NA_MEMORY;
+		err->mes = "Result are out of memory";
+		return NULL;
 	}
 	
 	for(int row = 0; row < rows; row++) {
@@ -51,41 +52,41 @@ Real readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err)
 	*nrows = rows;
 	*ncols = cols;
 	fclose(fin);
-	err.code = NA_OK;
+	err->code = NA_OK;
 	return result;
 } 
 
 int printMatrix(const char *finame, Real *matrix, int nrows, int ncols, struct NAError *err) {
-	if(fileName == NULL) {
-		err.code = NA_FILENAME;
-		err.message = "Invalid file name";
-		return err.code;
+	if(finame == NULL) {
+		err->code = NA_FILENAME;
+		err->mes = "Invalid file name";
+		return err->code;
 	}
 	
 	FILE* fout = fopen(finame, "w");
 	if(fout == NULL) {
-		err.code = NA_CAN_NOT_OPEN_FILE;
-		err.message = "Can't open file";
-		return err.code;
+		err->code = NA_CAN_NOT_OPEN_FILE;
+		err->mes = "Can't open file";
+		return err->code;
 	}
 	
 	if(matrix == NULL) {
-		err.code = NA_NULLPOINTER;
-		err.message = "NULL pointer to matrix";
-		return err.code;
+		err->code = NA_NULLPOINTER;
+		err->mes = "NULL pointer to matrix";
+		return err->code;
 	}
 	
 	printf("rows: %d, columns: %d\n", nrows, ncols);
 	for(int i = 0; i < nrows; i++)
 	{
 		for(int j = 0; j < ncols; j++)
-			printf("lf ", matrix[i * ncols + j]);
+			printf("%lf ", matrix[i * ncols + j]);
 		printf("\n");
 	}
 	
 	fclose(fout);
-	err.code = NA_OK;
-	return err.code;
+	err->code = NA_OK;
+	return err->code;
 }
 
 static void transpose(Real *matrix, int n) {
@@ -119,7 +120,7 @@ static void plus_str(Real *matrix, int n, int row_i1, int row_i2, Real a) {
 		matrix[row_i1 * n + j] = matrix[row_i1 * n + j] + a * matrix[row_i2 * n + j];
 }
 
-static Real multiplication(Real *A, Real *B, int n) {
+static Real* multiplication(Real *A, Real *B, int n) {
 	Real *C;
 	C = (Real*)malloc(n * n * sizeof(Real));
 	for(int i = 0; i < n; i++)
@@ -157,12 +158,12 @@ static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err,
 	}
 	for(int k = 0; k < n; k++) {
 		if(fabs(matrix[k * n + k]) < eps) {
-			err.code = NA_MATR_IS_SINGULAR;
-			err.message = "Matrix is singular";
+			err->code = NA_MATR_IS_SINGULAR;
+			err->mes = "Matrix is singular";
 			return;
 		}
 	}
-	err.code = NA_OK
+	err->code = NA_OK;
 }
 
 void inverse(Real *matrix, int n, struct NAError *err, Real eps) {
@@ -175,11 +176,11 @@ void inverse(Real *matrix, int n, struct NAError *err, Real eps) {
 			else
 				matrix_dop[i * n + j] = 0;
 
-	diagonal(matrix, matrix_dop, n, err);
-	if(err.code != NA_MATR_IS_SINGULAR) {
+	diagonal(matrix, matrix_dop, n, err, eps);
+	if(err->code != NA_MATR_IS_SINGULAR) {
 		transpose(matrix, n);
 		transpose(matrix_dop, n);
-		diagonal(matrix, matrix_dop, n, err);
+		diagonal(matrix, matrix_dop, n, err, eps);
 		transpose(matrix_dop, n);
 	}
 	for(int i = 0; i < n; i++)
@@ -194,10 +195,10 @@ int check(Real *matrix, Real *inverse, int n, Real eps) {
 	for(int i = 0; i < n; i++)
 		for(int j = 0; j < n; j++)
 			if(i == j)
-				if(compare(result[i * n + j], 1.0, eps) != 0)
+				if(compareReal(result[i * n + j], 1.0, eps) != 0)
 					return 0;
 			else
-				if(compare(result[i * n + j], 0, eps) != 0)
+				if(compareReal(result[i * n + j], 0, eps) != 0)
 					return 0;
 	return 1;
 }

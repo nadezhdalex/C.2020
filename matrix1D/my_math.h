@@ -1,3 +1,4 @@
+#include <math.h>
 #define EPS 0.00001
 typedef double Real;
 

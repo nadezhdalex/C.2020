@@ -2,6 +2,7 @@
 #include <math.h>
 #include "matrix_1d.h"
 #include "errors.h"
+#include <stdlib.h>
 
 static Real find_inverse(const char *finameIN, const char *finameOUT, int *ncols, int *nrows; Real *matrix, struct NAError *err, Real eps) {
 	matrix = readMatrix(&finameIN, &nrows, &ncols, &err);
@@ -10,13 +11,13 @@ static Real find_inverse(const char *finameIN, const char *finameOUT, int *ncols
 	for(int i = 0; i < n; i++)
 		for(int j = 0; j < n; j++)
 			inverse[i * n + j] = matrix[i * n + j];
-	if(err.code != NA_OK) {
-		return err.code;
+	if(err->code != NA_OK) {
+		return err->code;
 	}
 	if(ncols != nrows) {
-		err.code = NA_NOT_QUADRATIC;
-		err.message = "Matrix is not quadratic";
-		return err.code;
+		err->code = NA_NOT_QUADRATIC;
+		err->mes = "Matrix is not quadratic";
+		return err->code;
 	}
 	inverse(inverse, nrows, &err, eps);
 	return inverse;
@@ -25,7 +26,7 @@ static Real find_inverse(const char *finameIN, const char *finameOUT, int *ncols
 static void test(const char *finameIN, const char *finameOUT, int expected_error, char *message) {
 	int *ncols, *nrows;
 	struct NAError error; 
-    int error.code = NA_OK;
+    error.code = NA_OK;
     Real *matrix; 
     Real result = find_inverse(finameIN, finameOUT, &ncols, &nrows, matrix, &error, EPS);
     if(expected_error != error.code) {
