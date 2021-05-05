@@ -4,14 +4,15 @@
 #include "matrix_1d.h"
 #include <stdlib.h>
 
-static Real* find_inverse(const char *finameIN, const char *finameOUT, int *ncols, int *nrows, Real *matrix, struct NAError *err, Real eps) {
-	matrix = readMatrix(finameIN, nrows, ncols, err);
+static Real* find_inverse(const char *finameIN, const char *finameOUT, int *ncols, int *nrows, Real **matrix, struct NAError *err, Real eps) {
+	*matrix = readMatrix(finameIN, nrows, ncols, err);
 	Real *inverse_matrix;
+	printMatrix(finameOUT, *matrix, *nrows, *ncols, err);
 	int n = *nrows;
 	inverse_matrix = (Real*)malloc(n * n * sizeof(Real));
 	for(int i = 0; i < n; i++)
 		for(int j = 0; j < n; j++)
-			inverse_matrix[i * n + j] = matrix[i * n + j];
+			inverse_matrix[i * n + j] = (*matrix)[i * n + j];
 	if(err->code != NA_OK) {
 		return NULL;
 	}
@@ -25,13 +26,13 @@ static Real* find_inverse(const char *finameIN, const char *finameOUT, int *ncol
 }
 
 static void test(const char *finameIN, const char *finameOUT, int expected_error, char *message) {
-	int *ncols, *nrows;
-	int n = *nrows;
+	int ncols, nrows;
 	struct NAError error; 
     error.code = NA_OK;
     Real *matrix;
     Real *result; 
-    result = find_inverse(finameIN, finameOUT, ncols, nrows, matrix, &error, EPS);
+    result = find_inverse(finameIN, finameOUT, &ncols, &nrows, &matrix, &error, EPS);
+    int n = nrows;
     if(expected_error != error.code) {
     	printf("******* Test FAILED! WRONG ERROR_CODE******* %s\nRight ERROR = %d, Your error = %d\n Your message = %s\n", message, expected_error, error.code, error.mes);
         return;
@@ -42,17 +43,18 @@ static void test(const char *finameIN, const char *finameOUT, int expected_error
     }
     if(check(matrix, result, n, EPS)) {
         printf("Test OK!\n");
-        printMatrix(finameOUT, result, *nrows, *ncols, &error);
+        printMatrix(finameOUT, result, nrows, ncols, &error);
         return;
     }
     else {
         printf("******* Test FAILED! WRONG ANSWER******* %s\n", message);
-        printMatrix(finameOUT, result, *nrows, *ncols, &error);
+        printMatrix(finameOUT, result, nrows, ncols, &error);
         return;
     }
 }
 
 int main(void) {
     test("input.txt", "output.txt", NA_OK, "Test 1");
+    test("inp1.txt", "out1.txt", NA_OK, "Test 2");
     return 0; 
 }

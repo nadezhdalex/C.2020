@@ -45,7 +45,7 @@ Real* readMatrix(const char *finame, int *nrows, int *ncols, struct NAError *err
 	}
 	
 	for(int row = 0; row < rows; row++) {
-		for(int col = 0; cols < cols; col++) {
+		for(int col = 0; col < cols; col++) {
 			fscanf(fin, "%lf", &result[row * cols + col]);
 		}
 	}
@@ -76,12 +76,12 @@ int printMatrix(const char *finame, Real *matrix, int nrows, int ncols, struct N
 		return err->code;
 	}
 	
-	printf("rows: %d, columns: %d\n", nrows, ncols);
+	fprintf(fout, "rows: %d, columns: %d\n", nrows, ncols);
 	for(int i = 0; i < nrows; i++)
 	{
 		for(int j = 0; j < ncols; j++)
-			printf("%lf ", matrix[i * ncols + j]);
-		printf("\n");
+			fprintf(fout, "%lf ", matrix[i * ncols + j]);
+		fprintf(fout, "\n");
 	}
 	
 	fclose(fout);
@@ -133,12 +133,12 @@ static Real* multiplication(Real *A, Real *B, int n) {
 }
 
 static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err, Real eps) {
-	int error = NA_OK;
+	err->code = NA_OK; //int error = NA_OK;
 	for(int k = 0; k < (n - 1); k++) {
-		error = NA_MATR_IS_SINGULAR;
+		err->code = NA_MATR_IS_SINGULAR; //error = NA_MATR_IS_SINGULAR;
 		for(int i = k; i < n; i++) {
-			if(fabs(matrix[i * n + k]) >= eps) {
-				error = NA_OK;
+			if(fabs(matrix[i * n + k]) > eps) {
+				err->code = NA_OK; //error = NA_OK;
 				swap(matrix_dop, n, k, i);
 				swap(matrix, n, k, i);
 
@@ -147,35 +147,40 @@ static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err,
 				break;
 			}
 		}
-		if(error == NA_OK) {
+		if(err->code == NA_OK) { //error == NA_OK) {
 			for(int i = k + 1; i < n; i++) {
 				plus_str(matrix_dop, n, i, k, -matrix[i * n + k] / matrix[k * n + k]);
 				plus_str(matrix, n, i, k, -matrix[i * n + k] / matrix[k * n + k]);
 			}
 		}
-		else
+		else {
 			break;
+		}
 	}
 	for(int k = 0; k < n; k++) {
 		if(fabs(matrix[k * n + k]) < eps) {
+			printf("Flag");
 			err->code = NA_MATR_IS_SINGULAR;
 			err->mes = "Matrix is singular";
-			return;
+			// return;
 		}
 	}
-	err->code = NA_OK;
+	//err->code = NA_OK;
 }
 
 void inverse(Real *matrix, int n, struct NAError *err, Real eps) {
 	Real *matrix_dop;
 	matrix_dop = (Real*)malloc(n * n * sizeof(Real));
-	for(int i = 0; i < n; i++)
-		for(int j = 0; j < n; j++)
-			if(i == j)
+	for(int i = 0; i < n; i++) {
+		for(int j = 0; j < n; j++) {
+			if(i == j) {
 				matrix_dop[i * n + j] = 1;
-			else
+			}
+			else {
 				matrix_dop[i * n + j] = 0;
-
+			}
+		}
+	}
 	diagonal(matrix, matrix_dop, n, err, eps);
 	if(err->code != NA_MATR_IS_SINGULAR) {
 		transpose(matrix, n);
@@ -183,22 +188,30 @@ void inverse(Real *matrix, int n, struct NAError *err, Real eps) {
 		diagonal(matrix, matrix_dop, n, err, eps);
 		transpose(matrix_dop, n);
 	}
-	for(int i = 0; i < n; i++)
-		for(int j = 0; j < n; j++)
+	for(int i = 0; i < n; i++) {
+		for(int j = 0; j < n; j++) {
 			matrix[i * n + j] = matrix_dop[i * n + j];
+		}
+	}
 	free(matrix_dop);
 }
 
 int check(Real *matrix, Real *inverse, int n, Real eps) {
 	Real *result;
 	result = multiplication(matrix, inverse, n);
-	for(int i = 0; i < n; i++)
-		for(int j = 0; j < n; j++)
-			if(i == j)
-				if(compareReal(result[i * n + j], 1.0, eps) != 0)
+	for(int i = 0; i < n; i++) {
+		for(int j = 0; j < n; j++) {
+			if(i == j) {
+				if(compareReal(result[i * n + j], 1.0, eps) != 0) {
 					return 0;
-			else
-				if(compareReal(result[i * n + j], 0, eps) != 0)
+				}
+			}
+			else {
+				if(compareReal(result[i * n + j], 0, eps) != 0) {
 					return 0;
+				}
+			}
+		}
+	}
 	return 1;
 }
