@@ -133,12 +133,12 @@ static Real* multiplication(Real *A, Real *B, int n) {
 }
 
 static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err, Real eps) {
-	err->code = NA_OK; //int error = NA_OK;
+	err->code = NA_OK;
 	for(int k = 0; k < (n - 1); k++) {
-		err->code = NA_MATR_IS_SINGULAR; //error = NA_MATR_IS_SINGULAR;
+		err->code = NA_MATR_IS_SINGULAR;
 		for(int i = k; i < n; i++) {
 			if(fabs(matrix[i * n + k]) > eps) {
-				err->code = NA_OK; //error = NA_OK;
+				err->code = NA_OK;
 				swap(matrix_dop, n, k, i);
 				swap(matrix, n, k, i);
 
@@ -147,7 +147,7 @@ static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err,
 				break;
 			}
 		}
-		if(err->code == NA_OK) { //error == NA_OK) {
+		if(err->code == NA_OK) {
 			for(int i = k + 1; i < n; i++) {
 				plus_str(matrix_dop, n, i, k, -matrix[i * n + k] / matrix[k * n + k]);
 				plus_str(matrix, n, i, k, -matrix[i * n + k] / matrix[k * n + k]);
@@ -159,13 +159,11 @@ static void diagonal(Real *matrix, Real *matrix_dop, int n, struct NAError *err,
 	}
 	for(int k = 0; k < n; k++) {
 		if(fabs(matrix[k * n + k]) < eps) {
-			printf("Flag");
 			err->code = NA_MATR_IS_SINGULAR;
 			err->mes = "Matrix is singular";
-			// return;
+			return;
 		}
 	}
-	//err->code = NA_OK;
 }
 
 void inverse(Real *matrix, int n, struct NAError *err, Real eps) {
@@ -203,15 +201,18 @@ int check(Real *matrix, Real *inverse, int n, Real eps) {
 		for(int j = 0; j < n; j++) {
 			if(i == j) {
 				if(compareReal(result[i * n + j], 1.0, eps) != 0) {
+					free(result);
 					return 0;
 				}
 			}
 			else {
 				if(compareReal(result[i * n + j], 0, eps) != 0) {
+					free(result);
 					return 0;
 				}
 			}
 		}
 	}
+	free(result);
 	return 1;
 }
