@@ -171,6 +171,10 @@ static void diagonal(Real **matrix, int n, struct NAError *err, Real eps) {
 
 Real det(Real **matrix, int n, struct NAError *err, Real eps) {
 	diagonal(matrix, n, err, eps);
+	if(err->code == NA_MATR_IS_SINGULAR) {
+		err->code = NA_OK;
+		return 0;
+	}
 	Real determinant = 1.0;
 	if(err->code != NA_MATR_IS_SINGULAR) {
 		for(int i = 0; i < n; i++) {
