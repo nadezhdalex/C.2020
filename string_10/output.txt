@@ -1,0 +1,27 @@
+max = 11, min = 1, average = 5.5
+
+symbol .: times = 1, percents = 0.757576
+symbol A: times = 2, percents = 1.515152
+symbol N: times = 2, percents = 1.515152
+symbol W: times = 1, percents = 0.757576
+symbol a: times = 12, percents = 9.090909
+symbol c: times = 1, percents = 0.757576
+symbol d: times = 6, percents = 4.545455
+symbol e: times = 16, percents = 12.121212
+symbol g: times = 4, percents = 3.030303
+symbol h: times = 2, percents = 1.515152
+symbol i: times = 8, percents = 6.060606
+symbol k: times = 1, percents = 0.757576
+symbol l: times = 7, percents = 5.303030
+symbol m: times = 2, percents = 1.515152
+symbol n: times = 12, percents = 9.090909
+symbol o: times = 6, percents = 4.545455
+symbol p: times = 1, percents = 0.757576
+symbol r: times = 9, percents = 6.818182
+symbol s: times = 9, percents = 6.818182
+symbol t: times = 9, percents = 6.818182
+symbol u: times = 6, percents = 4.545455
+symbol v: times = 5, percents = 3.787879
+symbol w: times = 3, percents = 2.272727
+symbol x: times = 1, percents = 0.757576
+symbol y: times = 6, percents = 4.545455
