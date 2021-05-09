@@ -15,14 +15,14 @@ static void find_and_replace(struct Map *map, long int map_len, char *word) {
 static void remove_elem(struct Map *map, long int *map_len, char *word) {
     for(int i = 0; i < *map_len; i++) {
         if(string_cmp(map[i].key, word) == 0) {
-            int new_len_key = string_length(map[map_len - 1].key);
-            int new_len_value = string_length(map[map_len - 1].value);
+            int new_len_key = string_length(map[*map_len - 1].key);
+            int new_len_value = string_length(map[*map_len - 1].value);
             map[i].key = (char*)realloc(map[i].key, new_len_key);
             map[i].value = (char*)realloc(map[i].value, new_len_value);
-            string_copy(map[i].key, map[map_len - 1].key);
-            string_copy(map[i].value, map[map_len - 1].value);
-            free(map[map_len - 1].key);
-            free(map[map_len - 1].value);
+            string_copy(map[i].key, map[*map_len - 1].key);
+            string_copy(map[i].value, map[*map_len - 1].value);
+            free(map[*map_len - 1].key);
+            free(map[*map_len - 1].value);
             *map_len--;
             break;
         }
@@ -50,6 +50,8 @@ void function_define(FILE *fin, FILE *fout) {
     int word_count = 0;
     int define_flag = 0;
     char symbol;
+    char *def = "#define";
+    char *und = "#undef";
     while((string = read_string(fin)) && (string != NULL)) {
         len = string_length(string);
         word_count = 0;
@@ -76,10 +78,10 @@ void function_define(FILE *fin, FILE *fout) {
                         word[j] = string[i - curr_len + j];
                     }
                     if(word_count == 1) {
-                        if(string_cmp("#define", word) == 0) {
+                        if(string_cmp(def, word) == 0) {
                             define_flag = 1;
                         }
-                        else if(string_cmp("#undef", word) == 0) {
+                        else if(string_cmp(und, word) == 0) {
                             define_flag = -1;
                         }
                         else {
@@ -120,5 +122,6 @@ void function_define(FILE *fin, FILE *fout) {
         free(string);
     }
     freeMap(map, map_len);
-
+	free(def);
+	free(und);
 }
