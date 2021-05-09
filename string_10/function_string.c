@@ -6,7 +6,8 @@ static void find_and_replace(struct Map *map, long int map_len, char *word) {
     for(int i = 0; i < map_len; i++) {
         if(string_cmp(map[i].key, word) == 0) {
             int new_len = string_length(map[i].value);
-            word = (char*)realloc(word, new_len);
+            word = (char*)realloc(word, new_len + 1);
+            word[new_len] = '\0';
             string_copy(word, map[i].value);
         }
     }
@@ -17,13 +18,15 @@ static void remove_elem(struct Map *map, long int *map_len, char *word) {
         if(string_cmp(map[i].key, word) == 0) {
             int new_len_key = string_length(map[*map_len - 1].key);
             int new_len_value = string_length(map[*map_len - 1].value);
-            map[i].key = (char*)realloc(map[i].key, new_len_key);
-            map[i].value = (char*)realloc(map[i].value, new_len_value);
+            map[i].key = (char*)realloc(map[i].key, new_len_key + 1);
+            map[i].key[new_len_key] = '\0';
+            map[i].value = (char*)realloc(map[i].value, new_len_value + 1);
+            map[i].value[new_len_value] = '\0';
             string_copy(map[i].key, map[*map_len - 1].key);
             string_copy(map[i].value, map[*map_len - 1].value);
             free(map[*map_len - 1].key);
             free(map[*map_len - 1].value);
-            *map_len--;
+            (*map_len)--;
             break;
         }
     }
@@ -73,8 +76,11 @@ void function_define(FILE *fin, FILE *fout) {
 
             if((symbol == ' ') || (i == len - end_symbol - 1)) {
                 if(curr_len > 0) {
-                    word = (char*)realloc(word, curr_len);
-                    for(int j = 0; i < curr_len; j++) {
+                    word = (char*)realloc(word, curr_len + 1);
+                    word[curr_len] = '\0';
+                    if(word == NULL)
+                        printf("Failed");
+                    for(int j = 0; j < curr_len; j++) {
                         word[j] = string[i - curr_len + j];
                     }
                     if(word_count == 1) {
@@ -91,7 +97,8 @@ void function_define(FILE *fin, FILE *fout) {
                     if(word_count == 2 && define_flag != 0) {
                         if(define_flag == 1) {
                             map = (struct Map*)realloc(map, map_len + 1);
-                            map[map_len - 1].key = (char*)realloc(map[map_len - 1].key, curr_len);
+                            map[map_len - 1].key = (char*)realloc(map[map_len - 1].key, curr_len + 1);
+                            map[map_len - 1].key[curr_len] = '\0';
                             string_copy(map[map_len - 1].key, word);        
                         }
                         else {
@@ -99,10 +106,11 @@ void function_define(FILE *fin, FILE *fout) {
                         }
                     }
                     if(word_count == 3 && define_flag == 1) {
-                        map[map_len - 1].value = (char*)realloc(map[map_len - 1].value, len - end_symbol - i);
+                        map[map_len - 1].value = (char*)realloc(map[map_len - 1].value, len - end_symbol - i + 1);
                         for(int k = 0; k < len - end_symbol - i; k++) {
                             map[map_len - 1].value[k] = string[i + k + 1];
                         }
+                        map[map_len - 1].value[len - end_symbol] = '\0';
                         break;
                     }
                     if(define_flag == 0) {
