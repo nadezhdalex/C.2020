@@ -118,11 +118,11 @@ void function_define(FILE *fin, FILE *fout) {
                         }
                     }
                     if(word_count == 3 && define_flag == 1) {
-                        map[map_len - 1].value = (char*)realloc(map[map_len - 1].value, len - end_symbol - i + 1);
-                        for(int k = 0; k < len - end_symbol - i; k++) {
-                            map[map_len - 1].value[k] = string[i + k + 1];
+                        map[map_len - 1].value = (char*)realloc(map[map_len - 1].value, len - end_symbol - (i - curr_len));
+                        for(int k = 0; k < len - end_symbol - (i - curr_len); k++) {
+                            map[map_len - 1].value[k] = string[i + k];
                         }
-                        map[map_len - 1].value[len - end_symbol - i] = '\0';
+                        map[map_len - 1].value[len - end_symbol - (i - curr_len)] = '\0';
                         break;
                     }
                     if(define_flag == 0) {
