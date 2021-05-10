@@ -60,6 +60,8 @@ void function_define(FILE *fin, FILE *fout) {
         word_count = 0;
         word = NULL;
         define_flag = 3;
+        is_new_word = 1;
+        curr_len = 0;
         if(string[len - 1] == '\n')
             end_symbol = 1;
         else
@@ -82,7 +84,10 @@ void function_define(FILE *fin, FILE *fout) {
                     if(word == NULL)
                         printf("Failed");
                     for(int j = 0; j < curr_len; j++) {
-                        word[j] = string[i - curr_len + j + 1];
+                        word[j] = string[i - curr_len + j];
+                        if(i - curr_len + j == -1) {
+                        	printf("-1");	
+                        }
                     }
                     printf("%s|", word);
                     if(word_count == 1) {
@@ -99,6 +104,7 @@ void function_define(FILE *fin, FILE *fout) {
                     if(word_count == 2 && define_flag != 0) {
                         if(define_flag == 1) {
                             map = (struct Map*)realloc(map, map_len + 1);
+                            map_len++;
                             map[map_len - 1].key = (char*)realloc(map[map_len - 1].key, curr_len + 1);
                             map[map_len - 1].key[curr_len] = '\0';
                             string_copy(map[map_len - 1].key, word);        
