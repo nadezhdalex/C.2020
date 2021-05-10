@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include "my_string.h"
 #include "function_string.h"
-static void find_and_replace(struct Map *map, long int map_len, char *word) {
+static void find_and_replace(struct Map *map, long int map_len, char **word) {
     for(int i = 0; i < map_len; i++) {
-        if(string_cmp(map[i].key, word) == 0) {
+        if(string_cmp(map[i].key, *word) == 0) {
             int new_len = string_length(map[i].value);
-            word = (char*)realloc(word, new_len + 1);
-            word[new_len] = '\0';
-            string_copy(word, map[i].value);
+            *word = (char*)realloc(*word, new_len + 1);
+            *word[new_len] = '\0';
+            string_copy(*word, map[i].value);
         }
     }
 }
@@ -103,8 +103,10 @@ void function_define(FILE *fin, FILE *fout) {
                     }
                     if(word_count == 2 && define_flag != 0) {
                         if(define_flag == 1) {
-                            map = (struct Map*)realloc(map, map_len + 1);
+                            map = (struct Map*)realloc(map, (map_len + 1) * sizeof(struct Map));
                             map_len++;
+                            map[map_len - 1].key = NULL;
+                            map[map_len - 1].value = NULL;
                             map[map_len - 1].key = (char*)realloc(map[map_len - 1].key, curr_len + 1);
                             map[map_len - 1].key[curr_len] = '\0';
                             string_copy(map[map_len - 1].key, word);        
@@ -118,11 +120,11 @@ void function_define(FILE *fin, FILE *fout) {
                         for(int k = 0; k < len - end_symbol - i; k++) {
                             map[map_len - 1].value[k] = string[i + k + 1];
                         }
-                        map[map_len - 1].value[len - end_symbol] = '\0';
+                        map[map_len - 1].value[len - end_symbol - i] = '\0';
                         break;
                     }
                     if(define_flag == 0) {
-                        find_and_replace(map, map_len, word);
+                        find_and_replace(map, map_len, &word);
                     }          
                 }
                 is_new_word = 1;
