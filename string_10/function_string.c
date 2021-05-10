@@ -62,11 +62,12 @@ void function_define(FILE *fin, FILE *fout) {
         define_flag = 3;
         is_new_word = 1;
         curr_len = 0;
-        if(string[len - 1] == '\n')
+        if(string[len - 1] == '\n') {
             end_symbol = 1;
+            printf("1");
+        }
         else
             end_symbol = 0; //строка в конце файла
-
         for(long int i = 0; i < len - end_symbol; i++) {
             symbol = string[i];
             if(symbol != ' ') {
@@ -78,6 +79,7 @@ void function_define(FILE *fin, FILE *fout) {
                 curr_len++;
 
             if((symbol == ' ') || (i == len - end_symbol - 1)) {
+            	if(i == len - end_symbol - 1) {i++;}
                 if(curr_len > 0) {
                     word = (char*)realloc(word, curr_len + 1);
                     word[curr_len] = '\0';
