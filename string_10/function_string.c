@@ -45,7 +45,7 @@ void function_define(FILE *fin, FILE *fout) {
     struct Map *map = NULL;
     long int map_len = 0;
     char *string;
-    char *word = NULL;
+    char *word;
     int curr_len = 0;
     int is_new_word = 1;
     int end_symbol = 0;
@@ -58,6 +58,7 @@ void function_define(FILE *fin, FILE *fout) {
     while((string = read_string(fin)) && (string != NULL)) {
         len = string_length(string);
         word_count = 0;
+        word = NULL;
         define_flag = 3;
         if(string[len - 1] == '\n')
             end_symbol = 1;
@@ -81,8 +82,9 @@ void function_define(FILE *fin, FILE *fout) {
                     if(word == NULL)
                         printf("Failed");
                     for(int j = 0; j < curr_len; j++) {
-                        word[j] = string[i - curr_len + j];
+                        word[j] = string[i - curr_len + j + 1];
                     }
+                    printf("%s|", word);
                     if(word_count == 1) {
                         if(string_cmp(def, word) == 0) {
                             define_flag = 1;
@@ -130,6 +132,4 @@ void function_define(FILE *fin, FILE *fout) {
         free(string);
     }
     freeMap(map, map_len);
-	free(def);
-	free(und);
 }
