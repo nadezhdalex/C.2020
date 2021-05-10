@@ -79,7 +79,7 @@ void function_define(FILE *fin, FILE *fout) {
                 curr_len++;
 
             if((symbol == ' ') || (i == len - end_symbol - 1)) {
-            	if(i == len - end_symbol - 1) {i++;}
+            	if(i == len - end_symbol - 1 && symbol != ' ') {i++;}
                 if(curr_len > 0) {
                     word = (char*)realloc(word, curr_len + 1);
                     word[curr_len] = '\0';
@@ -127,7 +127,10 @@ void function_define(FILE *fin, FILE *fout) {
                     }
                     if(define_flag == 0) {
                         find_and_replace(map, map_len, &word);
-                    }          
+                        for(int j = 0; j < curr_len; j++) {
+                        	string[i - curr_len + j] = word[j];
+                    	 }
+                    }       
                 }
                 is_new_word = 1;
                 curr_len = 0;
