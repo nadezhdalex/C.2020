@@ -42,7 +42,7 @@ static void add_to_list(const char *fpath, char **list, long int *len_list) {
     int len_finame = strlen(finame);
     (*len_list)++;
     list = (char**)realloc(list, (*len_list) * sizeof(char*));
-    list[(*len_list) - 1] = (char*)realloc(list[(*len_list) - 1], (len_finame + 1) * sizeof(char)); 
+    list[(*len_list) - 1] = (char*)malloc((len_finame + 1) * sizeof(char)); 
     strcpy(list[(*len_list) - 1], finame);
     free(finame);
 }
