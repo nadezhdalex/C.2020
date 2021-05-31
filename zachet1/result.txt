@@ -1,0 +1,22 @@
+7 3
+zzzaabcs 
+abcdbdc 
+adsabb 
+aaavabcs 
+bcdabdc 
+zdavabb 
+bazbababcs 
+abzbdc 
+abcabb 
+abcs 
+bdc 
+abb 
+bbaabcs 
+cdbsbdc 
+cbaabb 
+zabbcabcs 
+cccbbdc 
+bazabb 
+zzabcs 
+bdc 
+zzzabb 
